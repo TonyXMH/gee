@@ -15,6 +15,7 @@ type Context struct {
 	//request info
 	Path   string
 	Method string
+	Params map[string]string
 	//response info
 	StatusCode int
 }
@@ -25,7 +26,13 @@ func newContext(w http.ResponseWriter, r *http.Request) *Context {
 		Req:    r,
 		Path:   r.URL.Path,
 		Method: r.Method,
+		Params: make(map[string]string), //会在router里赋值，但是最好初始化一下吧
 	}
+}
+
+func (c *Context) Param(key string) string {
+	value, _ := c.Params[key]
+	return value
 }
 
 //TODO:补充说明
