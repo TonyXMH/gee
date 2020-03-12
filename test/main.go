@@ -7,6 +7,7 @@ import (
 
 func main() {
 	r := gee.New()
+	r.Use(gee.Logger())
 	r.GET("/index", func(c *gee.Context) {
 		c.HTML(http.StatusOK, "<h1>Index Page</h1>")
 	})
@@ -27,7 +28,7 @@ func main() {
 			c.String(http.StatusOK, "hello %s, you are at:%s\n", c.Query("name"), c.Path)
 		})
 		v2.POST("/login", func(c *gee.Context) {
-			c.Josn(http.StatusOK, gee.H{
+			c.JSON(http.StatusOK, gee.H{
 				"username": c.PostForm("username"),
 				"password": c.PostForm("password"),
 			})
@@ -38,7 +39,7 @@ func main() {
 		c.String(http.StatusOK, "hello %s, you're at %s\n", c.Param("name"), c.Path)
 	})
 	r.GET("/assets/*filepath", func(c *gee.Context) {
-		c.Josn(http.StatusOK, gee.H{"filepath": c.Param("filepath")})
+		c.JSON(http.StatusOK, gee.H{"filepath": c.Param("filepath")})
 	})
 
 	r.Run(":9999")
