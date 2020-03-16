@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/TonyXMH/gee"
-	"html/template"
+	"github.com/TonyXMH/gee/gee-web"
 	"net/http"
-	"os"
-	"path/filepath"
 	"time"
 )
 
@@ -21,36 +18,44 @@ func formatAsDate(t time.Time) string {
 }
 
 func main() {
-	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	fmt.Println("++++++++++", dir)
-	r := gee.New()
-	r.Use(gee.Logger())
-	r.SetFuncMap(template.FuncMap{"formatAsDate": formatAsDate})
-	r.LoadHTMLGlob("templates/*")
-	r.Static("/assets", "static")
-	stu1 := &student{
-		Name: "tony",
-		Age:  27,
-	}
-	stu2 := &student{
-		Name: "tom",
-		Age:  10,
-	}
-	r.GET("/", func(c *gee.Context) {
-		c.HTML(http.StatusOK, "css.tmpl", nil)
+	r := gee_web.Default()
+	r.GET("/", func(c *gee_web.Context) {
+		c.String(http.StatusOK, "Hello tony\n")
 	})
-	r.GET("/students", func(c *gee.Context) {
-		c.HTML(http.StatusOK, "arr.tmpl", gee.H{
-			"title":  "gee",
-			"stuArr": [2]*student{stu1, stu2},
-		})
+	r.GET("/panic", func(c *gee_web.Context) {
+		names := []string{"tony"}
+		c.String(http.StatusOK, names[100])
 	})
-	r.GET("/date", func(c *gee.Context) {
-		c.HTML(http.StatusOK, "custom_func.tmpl", gee.H{
-			"title": "gee",
-			"now":   time.Now(),
-		})
-	})
+	//dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+	//fmt.Println("++++++++++", dir)
+	//r := gee.New()
+	//r.Use(gee.Logger())
+	//r.SetFuncMap(template.FuncMap{"formatAsDate": formatAsDate})
+	//r.LoadHTMLGlob("templates/*")
+	//r.Static("/assets", "static")
+	//stu1 := &student{
+	//	Name: "tony",
+	//	Age:  27,
+	//}
+	//stu2 := &student{
+	//	Name: "tom",
+	//	Age:  10,
+	//}
+	//r.GET("/", func(c *gee.Context) {
+	//	c.HTML(http.StatusOK, "css.tmpl", nil)
+	//})
+	//r.GET("/students", func(c *gee.Context) {
+	//	c.HTML(http.StatusOK, "arr.tmpl", gee.H{
+	//		"title":  "gee",
+	//		"stuArr": [2]*student{stu1, stu2},
+	//	})
+	//})
+	//r.GET("/date", func(c *gee.Context) {
+	//	c.HTML(http.StatusOK, "custom_func.tmpl", gee.H{
+	//		"title": "gee",
+	//		"now":   time.Now(),
+	//	})
+	//})
 	//
 	//v1 := r.Group("/v1")
 	//{

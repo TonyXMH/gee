@@ -1,4 +1,4 @@
-package gee
+package gee_web
 
 import (
 	"html/template"
@@ -30,6 +30,12 @@ func New() *Engine {
 	engine := &Engine{router: newRouter()}
 	engine.RouterGroup = &RouterGroup{engine: engine}
 	engine.groups = []*RouterGroup{engine.RouterGroup}
+	return engine
+}
+
+func Default() *Engine {
+	engine := New()
+	engine.Use(Logger(), Recovery())
 	return engine
 }
 
